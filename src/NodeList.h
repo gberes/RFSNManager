@@ -9,31 +9,34 @@
 #define NODELIST_H_
 
 #include <Wt/WContainerWidget>
-#include <Wt/WStackedWidget>
 #include <Wt/WMenu>
 #include <boost/system/error_code.hpp>
+#include "RequestBase.h"
 
 namespace Wt{
 namespace Http{
 class Message;
 }
+class WStackedWidget;
 }
 
 namespace RFSNMAN {
 
 class RFSNManager;
 
-class NodeList : public Wt::WContainerWidget {
+class NodeList : public Wt::WContainerWidget, public RequestBase {
 public:
 	NodeList(RFSNManager* man);
 	virtual ~NodeList();
 
 protected:
-	Wt::WStackedWidget contents;
+	Wt::WStackedWidget* contents;
 	Wt::WMenu* menu;
 	RFSNManager* manager;
 
-	void handleHttpResponse(boost::system::error_code err, const Wt::Http::Message& response);
+	void responseArrived(boost::system::error_code err, const Wt::Http::Message& response);
+	void showRequestErrorMessage(std::string msg);
+	void onElementClicked(std::string address );
 };
 
 } /* namespace RFSNMAN */

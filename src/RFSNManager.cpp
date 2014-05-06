@@ -6,11 +6,12 @@
  */
 
 #include "RFSNManager.h"
+#include "NodeDetails.h"
 #include <Wt/WBreak>
 #include <Wt/WContainerWidget>
 #include <Wt/WLineEdit>
 #include <Wt/WPushButton>
-#include <Wt/WText>
+#include <iostream>
 
 namespace RFSNMAN {
 
@@ -20,8 +21,8 @@ RFSNManager::~RFSNManager() {
 
 
 
-RFSNManager::RFSNManager(const Wt::WEnvironment& env)
-  : Wt::WApplication(env), nodeList(this)
+RFSNManager::RFSNManager(const Wt::WEnvironment& env, std::string gwaddress)
+  : Wt::WApplication(env),gatewayAddress(gwaddress), nodeList(this)
 {
   setTitle("RF sensor network manager");
   useStyleSheet("/resources/themes/bootstrap/3/bootstrap.css");
@@ -29,18 +30,33 @@ RFSNManager::RFSNManager(const Wt::WEnvironment& env)
 }
 
 void RFSNManager::showNode(std::string address){
-	root()->addWidget(new Wt::WText(address));
+	std::cout << "RFSNManager::showNode/" << __LINE__ << ": show node " << address << std::endl;
+	root()->addWidget(new NodeDetails(address, this));
+	root()->addWidget(new Wt::WText("pocsa"));
+}
+
+const std::string& RFSNManager::getGatewayAddress() const {
+	return gatewayAddress;
 }
 
 } /* namespace RFSNMAN */
 
+std::string gwaddr;
+
 
 Wt::WApplication *createApplication(const Wt::WEnvironment& env)
 {
-  return new RFSNMAN::RFSNManager(env);
+  return new RFSNMAN::RFSNManager(env, gwaddr);
 }
 
 int main(int argc, char **argv)
 {
+
+  if (argc < 7) {
+      std::cerr << "Usage: " << argv[0] << " <gateway address> --docroot=<docroot> --http-address <http address> --http-port <port>" << std::endl;
+      return 1;
+  } else {
+	  gwaddr = std::string(argv[1]);
+  }
   return WRun(argc, argv, &createApplication);
 }

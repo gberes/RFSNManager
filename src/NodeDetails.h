@@ -10,22 +10,35 @@
 
 #include <boost/system/error_code.hpp>
 #include <Wt/WContainerWidget>
+#include <Wt/WPanel>
 #include <string>
+#include "RequestBase.h"
 
 namespace Wt{
 namespace Http{
 class Message;
 }
+class WStackedWidget;
+class WPanel;
 }
 
 namespace RFSNMAN {
 
-class NodeDetails : public Wt::WContainerWidget {
+class RFSNManager;
+
+class NodeDetails : public Wt::WContainerWidget, public RequestBase {
 public:
-	NodeDetails(std::string address);
+	NodeDetails(std::string address, RFSNManager* manager);
 	virtual ~NodeDetails();
 
-	void handleHttpResponse(boost::system::error_code err, const Wt::Http::Message& response);
+	void responseArrived(boost::system::error_code err, const Wt::Http::Message& response);
+	void showRequestErrorMessage(std::string msg);
+
+protected:
+	RFSNManager* manager;
+	Wt::WStackedWidget* contents;
+	Wt::WPanel* panel;
+	std::string address;
 };
 
 } /* namespace RFSNMAN */

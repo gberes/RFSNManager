@@ -22,12 +22,15 @@ namespace RFSNMAN {
 
 class RFSNManager : public Wt::WApplication {
 public:
-	RFSNManager(const Wt::WEnvironment& env);
+	RFSNManager(const Wt::WEnvironment& env, std::string gwaddress);
 	virtual ~RFSNManager();
 	void showNode(std::string address);
+	const std::string& getGatewayAddress() const;
 
 private:
+	std::string gatewayAddress;
 	NodeList nodeList;
+
 };
 
 } /* namespace RFSNMAN */
