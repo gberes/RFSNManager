@@ -11,6 +11,7 @@
 #include <Wt/WContainerWidget>
 #include <Wt/WLineEdit>
 #include <Wt/WPushButton>
+#include <Wt/WServer>
 #include <iostream>
 
 namespace RFSNMAN {
@@ -32,8 +33,8 @@ RFSNManager::RFSNManager(const Wt::WEnvironment& env, std::string gwaddress)
 
 void RFSNManager::showNode(std::string address){
 	std::cout << "RFSNManager::showNode/" << __LINE__ << ": show node " << address << std::endl;
-	boost::function<void(NodeDetails*)> addWidgetFunc = root()->addWidget(new NodeDetails(address, this));
-	WServer::instance()->post(WApplication::sessionId(), addWidgetFunc);
+	boost::function<void(NodeDetails*)> addWidgetFunc = root()->addWidget;
+	Wt::WServer::instance()->post(WApplication::sessionId(), addWidgetFunc);
 	//root()->//addWidget(new NodeDetails(address, this));
 }
 

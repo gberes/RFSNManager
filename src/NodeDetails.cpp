@@ -45,7 +45,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	    	new Wt::WText(v2.second.get<std::string>("value"), manager->root());
 	    }
 	}
-	WApplication::triggerUpdate();
+	Wt::WApplication::triggerUpdate();
 }
 void NodeDetails::showRequestErrorMessage(std::string msg) {
 	addWidget(new Wt::WText(msg.c_str()));
