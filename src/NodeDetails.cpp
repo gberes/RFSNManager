@@ -137,9 +137,10 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		typeNum++;
 	}
 
-	Wt::WHBoxLayout *hbox = new Wt::WHBoxLayout();
-	hbox->addWidget(containerTable);
-	setLayout(hbox);
+//	Wt::WHBoxLayout *hbox = new Wt::WHBoxLayout();
+//	hbox->addWidget(containerTable);
+//	setLayout(hbox);
+	addWidget(containerTable);
 	Wt::WApplication::instance()->triggerUpdate();
 }
 void NodeDetails::showRequestErrorMessage(std::string msg) {

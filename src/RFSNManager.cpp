@@ -35,13 +35,13 @@ RFSNManager::RFSNManager(const Wt::WEnvironment& env, std::string gwaddress)
 }
 
 void RFSNManager::showNode(std::string address){
-	Wt::WWidget* currentNode = layout->widgetAt(Wt::WBorderLayout::East);
+	Wt::WWidget* currentNode = layout->widgetAt(Wt::WBorderLayout::Center);
 	if (currentNode != 0){
 		layout->removeWidget(currentNode);
 		// todo delete?
 	}
 	std::cout << "RFSNManager::showNode/" << __LINE__ << ": show node " << address << std::endl;
-	Wt::WServer::instance()->post(WApplication::sessionId(), boost::bind(&Wt::WBorderLayout::addWidget, layout, new NodeDetails(address, this), Wt::WBorderLayout::East));
+	Wt::WServer::instance()->post(WApplication::sessionId(), boost::bind(&Wt::WBorderLayout::addWidget, layout, new NodeDetails(address, this), Wt::WBorderLayout::Center));
 }
 
 const std::string& RFSNManager::getGatewayAddress() const {
