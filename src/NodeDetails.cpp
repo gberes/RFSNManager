@@ -59,6 +59,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	std::istringstream is(response.body());
 	read_json(is, result);
 
+	Wt::WTable *containerTable = new Wt::WTable();
 	Wt::WHBoxLayout *hbox = new Wt::WHBoxLayout();
 	setLayout(hbox);
 
@@ -90,11 +91,6 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 		}
 
-		Wt::WVBoxLayout *vbox = new Wt::WVBoxLayout();
-		Wt::WContainerWidget *cont = new  Wt::WContainerWidget();
-		cont->setLayout(vbox);
-
-
 
 	    BOOST_FOREACH(boost::property_tree::ptree::value_type &v2, v.second.get_child("values."))
 	    {
@@ -115,9 +111,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		    table->elementAt(row, 1)->addWidget(new Wt::WText(Wt::WString::fromUTF8("{1}").arg(sdt.values.at(i))));
 		}
 
-		vbox->addWidget(table);
-		panel->setCentralWidget(cont);
-		hbox->addWidget(panel);
+
 
 //		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
 //		for (unsigned i = 0; i < sdt.values.size(); ++i) {
@@ -139,7 +133,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 //		hbox->addWidget(chart);
 	}
 
-
+	hbox->addWidget(containerTable);
 	Wt::WApplication::instance()->triggerUpdate();
 }
 void NodeDetails::showRequestErrorMessage(std::string msg) {
