@@ -12,6 +12,7 @@
 #include <Wt/WStackedWidget>
 #include <Wt/WText>
 #include <Wt/WTable>
+#include <Wt/WHBoxLayout>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
@@ -42,6 +43,9 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	std::istringstream is(response.body());
 	read_json(is, result);
 
+	Wt::WHBoxLayout *hbox = new Wt::WHBoxLayout();
+	setLayout(hbox);
+
 	struct SensorDataTable {
 		int type;
 		std::vector<boost::posix_time::ptime> timestamps;
@@ -55,12 +59,11 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	    {
 	    	sdt.values.push_back(v2.second.get<float>("value"));
 	    	sdt.timestamps.push_back(v2.second.get<boost::posix_time::ptime>("timestamp"));
-	    	//new Wt::WText(v2.second.get<std::string>("value"), manager->root());
 	    }
 
-		Wt::WTable *table = new Wt::WTable(manager->root());
+		Wt::WTable *table = new Wt::WTable();
 		table->setHeaderCount(1);
-		table->setWidth("30%");
+		table->setWidth("20%");
 		table->elementAt(0, 0)->addWidget(new Wt::WText("Timestamp"));
 		table->elementAt(0, 1)->addWidget(new Wt::WText("Value"));
 
@@ -70,6 +73,8 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		    table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString(to_simple_string(sdt.timestamps.at(i)))));
 		    table->elementAt(row, 1)->addWidget(new Wt::WText(Wt::WString::fromUTF8("{1}").arg(sdt.values.at(i))));
 		}
+
+		hbox->addWidget(table);
 	}
 
 
