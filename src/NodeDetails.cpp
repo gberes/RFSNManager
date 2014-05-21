@@ -22,6 +22,21 @@
 #include <boost/date_time.hpp>
 #include "RFSNManager.h"
 
+#include <Wt/Chart/WCartesianChart>
+#include <Wt/Chart/WDataSeries>
+#include <Wt/WAbstractItemModel>
+#include <Wt/WAbstractItemView>
+#include <Wt/WApplication>
+#include <Wt/WContainerWidget>
+#include <Wt/WDate>
+#include <Wt/WEnvironment>
+#include <Wt/WPaintedWidget>
+#include <Wt/WItemDelegate>
+#include <Wt/WShadow>
+#include <Wt/WStandardItem>
+#include <Wt/WStandardItemModel>
+#include <Wt/WTableView>
+
 namespace RFSNMAN {
 
 NodeDetails::NodeDetails(std::string address, RFSNManager* manager) :
@@ -55,6 +70,9 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v,result.get_child("sensordatas")) {
 		SensorDataTable sdt;
 		sdt.type = v.second.get<int>("type");
+
+
+
 	    BOOST_FOREACH(boost::property_tree::ptree::value_type &v2, v.second.get_child("values."))
 	    {
 	    	sdt.values.push_back(v2.second.get<float>("value"));
@@ -75,6 +93,25 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		}
 
 		hbox->addWidget(table);
+
+		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
+		for (unsigned i = 0; i < sdt.values.size(); ++i) {
+			Wt::WStandardItem *item1 = new Wt::WStandardItem();
+			item1->setData(sdt.timestamps.at(i));
+			Wt::WStandardItem *item2 = new Wt::WStandardItem();
+			item2->setData(sdt.values.at(i));
+			model->setItem(i,0, item1);
+			model->setItem(i,1, item2);
+		}
+
+		Wt::Chart::WCartesianChart *chart = new Wt::Chart::WCartesianChart();
+		chart->setBackground(Wt::WColor(220, 220, 220));
+		chart->setModel(model);
+		chart->setXSeriesColumn(0);
+		chart->setLegendEnabled(true);
+		chart->setType(Wt::Chart::ScatterPlot);
+		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateScale);
+		hbox->addWidget(chart);
 	}
 
 
