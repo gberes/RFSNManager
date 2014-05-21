@@ -176,8 +176,8 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		typeNum++;
 	}
 
-	tableScrollArea->addChild(tableContainerTable);
-	chartScrollArea->addChild(chartContainerTable);
+	tableScrollArea->setWidget(tableContainerTable);
+	chartScrollArea->setWidget(chartContainerTable);
 
 	tabW->addTab(tableScrollArea, "Tables", Wt::WTabWidget::PreLoading);
 	tabW->addTab(chartScrollArea, "Charts", Wt::WTabWidget::PreLoading);
