@@ -16,6 +16,7 @@ namespace Wt{
 	class WLineEdit;
 	class WText;
 	class WEnvironment;
+	class WBorderLayout;
 }
 
 namespace RFSNMAN {
@@ -30,6 +31,7 @@ public:
 private:
 	std::string gatewayAddress;
 	NodeList nodeList;
+	 Wt::WBorderLayout *layout;
 
 };
 

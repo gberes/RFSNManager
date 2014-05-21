@@ -12,6 +12,7 @@
 #include <Wt/WLineEdit>
 #include <Wt/WPushButton>
 #include <Wt/WServer>
+#include <Wt/WBorderLayout>
 #include <iostream>
 
 namespace RFSNMAN {
@@ -28,12 +29,19 @@ RFSNManager::RFSNManager(const Wt::WEnvironment& env, std::string gwaddress)
   WApplication::enableUpdates(true);
   setTitle("RF sensor network manager");
   useStyleSheet("/resources/themes/bootstrap/3/bootstrap.css");
-  root()->addWidget(&nodeList);
+  layout = new Wt::WBorderLayout();
+  root()->setLayout(layout);
+  layout->addWidget(&nodeList, Wt::WBorderLayout::West);
 }
 
 void RFSNManager::showNode(std::string address){
+	Wt::WWidget* currentNode = layout->widgetAt(Wt::WBorderLayout::East);
+	if (currentNode != 0){
+		layout->removeWidget(currentNode);
+		// todo delete?
+	}
 	std::cout << "RFSNManager::showNode/" << __LINE__ << ": show node " << address << std::endl;
-	Wt::WServer::instance()->post(WApplication::sessionId(), boost::bind(&Wt::WContainerWidget::addWidget, root(), new NodeDetails(address, this)));
+	Wt::WServer::instance()->post(WApplication::sessionId(), boost::bind(&Wt::WBorderLayout::addWidget, layout, new NodeDetails(address, this), Wt::WBorderLayout::East));
 }
 
 const std::string& RFSNManager::getGatewayAddress() const {
