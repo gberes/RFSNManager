@@ -29,7 +29,7 @@
 //#include <Wt/WAbstractItemView>
 //#include <Wt/WApplication>
 //#include <Wt/WContainerWidget>
-//#include <Wt/WDate>
+#include <Wt/WDateTime>
 //#include <Wt/WEnvironment>
 //#include <Wt/WPaintedWidget>
 //#include <Wt/WItemDelegate>
@@ -132,7 +132,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
 		for (unsigned i = 0; i < sdt.values.size(); ++i) {
 			Wt::WStandardItem *item1 = new Wt::WStandardItem();
-			item1->setData(sdt.timestamps.at(i));
+			item1->setData(Wt::WDateTime(sdt.timestamps.at(i)));
 			Wt::WStandardItem *item2 = new Wt::WStandardItem();
 			item2->setData(10 *i);
 			model->setItem(i,0, item1);
@@ -145,7 +145,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		chart->setXSeriesColumn(0);
 		chart->setLegendEnabled(false);
 		chart->setType(Wt::Chart::ScatterPlot);
-		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateScale);
+		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateTimeScale );
 
 		chart->setPlotAreaPadding(40, Wt::Left | Wt::Top | Wt::Bottom);
 		chart->setPlotAreaPadding(40, Wt::Right);
