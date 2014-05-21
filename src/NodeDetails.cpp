@@ -178,6 +178,8 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 	tableScrollArea->setWidget(tableContainerTable);
 	chartScrollArea->setWidget(chartContainerTable);
+	tableScrollArea->setHorizontalScrollBarPolicy( Wt::WScrollArea::ScrollBarAlwaysOn);
+	chartScrollArea->setHorizontalScrollBarPolicy( Wt::WScrollArea::ScrollBarAlwaysOn);
 
 	tabW->addTab(tableScrollArea, "Tables", Wt::WTabWidget::PreLoading);
 	tabW->addTab(chartScrollArea, "Charts", Wt::WTabWidget::PreLoading);
