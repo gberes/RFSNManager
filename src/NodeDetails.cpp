@@ -60,14 +60,15 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	read_json(is, result);
 
 	Wt::WTable *containerTable = new Wt::WTable();
-	Wt::WHBoxLayout *hbox = new Wt::WHBoxLayout();
-	setLayout(hbox);
+	containerTable->setHeaderCount(0);
 
 	struct SensorDataTable {
 		int type;
 		std::vector<boost::posix_time::ptime> timestamps;
 		std::vector<float> values;
 	};
+
+	int typeNum = 0;
 
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v,result.get_child("sensordatas")) {
 		SensorDataTable sdt;
@@ -100,7 +101,6 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 		Wt::WTable *table = new Wt::WTable();
 		table->setHeaderCount(1);
-		table->setWidth("20%");
 		table->elementAt(0, 0)->addWidget(new Wt::WText("Timestamp"));
 		table->elementAt(0, 1)->addWidget(new Wt::WText("Value"));
 
@@ -111,7 +111,9 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		    table->elementAt(row, 1)->addWidget(new Wt::WText(Wt::WString::fromUTF8("{1}").arg(sdt.values.at(i))));
 		}
 
+		panel->setCentralWidget(table);
 
+		containerTable->elementAt(typeNum/2, typeNum%2)->addWidget(panel);
 
 //		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
 //		for (unsigned i = 0; i < sdt.values.size(); ++i) {
@@ -131,9 +133,13 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 //		chart->setType(Wt::Chart::ScatterPlot);
 //		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateScale);
 //		hbox->addWidget(chart);
+
+		typeNum++;
 	}
 
+	Wt::WHBoxLayout *hbox = new Wt::WHBoxLayout();
 	hbox->addWidget(containerTable);
+	setLayout(hbox);
 	Wt::WApplication::instance()->triggerUpdate();
 }
 void NodeDetails::showRequestErrorMessage(std::string msg) {
