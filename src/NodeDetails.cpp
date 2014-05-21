@@ -21,8 +21,9 @@
 #include <iostream>
 #include <boost/date_time.hpp>
 #include "RFSNManager.h"
+#include <Wt/WTabWidget>
 
-//#include <Wt/Chart/WCartesianChart>
+#include <Wt/Chart/WCartesianChart>
 //#include <Wt/Chart/WDataSeries>
 //#include <Wt/WAbstractItemModel>
 //#include <Wt/WAbstractItemView>
@@ -33,8 +34,8 @@
 //#include <Wt/WPaintedWidget>
 //#include <Wt/WItemDelegate>
 //#include <Wt/WShadow>
-//#include <Wt/WStandardItem>
-//#include <Wt/WStandardItemModel>
+#include <Wt/WStandardItem>
+#include <Wt/WStandardItemModel>
 //#include <Wt/WTableView>
 #include <Wt/WVBoxLayout>
 
@@ -59,9 +60,15 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	std::istringstream is(response.body());
 	read_json(is, result);
 
-	Wt::WTable *containerTable = new Wt::WTable();
-	containerTable->addStyleClass("table");
-	containerTable->setHeaderCount(0);
+	Wt::WTabWidget *tabW = new Wt::WTabWidget(this);
+
+	Wt::WTable *tableContainerTable = new Wt::WTable();
+	tableContainerTable->addStyleClass("table");
+	tableContainerTable->setHeaderCount(0);
+
+	Wt::WTable *chartContainerTable = new Wt::WTable();
+	tableContainerTable->addStyleClass("table");
+	chartContainerTable->setHeaderCount(0);
 
 	struct SensorDataTable {
 		int type;
@@ -75,20 +82,26 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		SensorDataTable sdt;
 		sdt.type = v.second.get<int>("type");
 
-		Wt::WPanel *panel = new Wt::WPanel();
-		panel->addStyleClass("centered-example");
+		Wt::WPanel *tablePanel = new Wt::WPanel();
+		Wt::WPanel *chartPanel = new Wt::WPanel();
+		tablePanel->addStyleClass("centered-example");
+		chartPanel->addStyleClass("centered-example");
 		switch (sdt.type){
 		case 0:
-			panel->setTitle("Temperature");
+			tablePanel->setTitle("Temperature");
+			chartPanel->setTitle("Temperature");
 			break;
 		case 1:
-			panel->setTitle("Light");
+			tablePanel->setTitle("Light");
+			chartPanel->setTitle("Light");
 			break;
 		case 2:
-			panel->setTitle("Voltage");
+			tablePanel->setTitle("Voltage");
+			chartPanel->setTitle("Voltage");
 			break;
 		case 3:
-			panel->setTitle("Current");
+			tablePanel->setTitle("Current");
+			chartPanel->setTitle("Current");
 			break;
 
 		}
@@ -113,36 +126,39 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		    table->elementAt(row, 1)->addWidget(new Wt::WText(Wt::WString::fromUTF8("{1}").arg(sdt.values.at(i))));
 		}
 
-		panel->setCentralWidget(table);
+		tablePanel->setCentralWidget(table);
+		tableContainerTable->elementAt(typeNum/2, typeNum%2)->addWidget(tablePanel);
 
-		containerTable->elementAt(typeNum/2, typeNum%2)->addWidget(panel);
+		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
+		for (unsigned i = 0; i < sdt.values.size(); ++i) {
+			Wt::WStandardItem *item1 = new Wt::WStandardItem();
+			item1->setData(sdt.timestamps.at(i));
+			Wt::WStandardItem *item2 = new Wt::WStandardItem();
+			item2->setData(sdt.values.at(i));
+			model->setItem(i,0, item1);
+			model->setItem(i,1, item2);
+		}
 
-//		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
-//		for (unsigned i = 0; i < sdt.values.size(); ++i) {
-//			Wt::WStandardItem *item1 = new Wt::WStandardItem();
-//			item1->setData(sdt.timestamps.at(i));
-//			Wt::WStandardItem *item2 = new Wt::WStandardItem();
-//			item2->setData(sdt.values.at(i));
-//			model->setItem(i,0, item1);
-//			model->setItem(i,1, item2);
-//		}
+		Wt::Chart::WCartesianChart *chart = new Wt::Chart::WCartesianChart();
+		chart->setBackground(Wt::WColor(220, 220, 220));
+		chart->setModel(model);
+		chart->setXSeriesColumn(0);
+		chart->setLegendEnabled(true);
+		chart->setType(Wt::Chart::ScatterPlot);
+		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateScale);
 
-//		Wt::Chart::WCartesianChart *chart = new Wt::Chart::WCartesianChart();
-//		chart->setBackground(Wt::WColor(220, 220, 220));
-//		chart->setModel(model);
-//		chart->setXSeriesColumn(0);
-//		chart->setLegendEnabled(true);
-//		chart->setType(Wt::Chart::ScatterPlot);
-//		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateScale);
-//		hbox->addWidget(chart);
+		chartPanel->setCentralWidget(chart);
+		chartContainerTable->elementAt(typeNum/2, typeNum%2)->addWidget(chartPanel);
 
 		typeNum++;
 	}
 
+	tabW->addTab(tableContainerTable, "Tables", Wt::WTabWidget::PreLoading);
+	tabW->addTab(chartContainerTable, "Charts", Wt::WTabWidget::PreLoading);
 //	Wt::WHBoxLayout *hbox = new Wt::WHBoxLayout();
 //	hbox->addWidget(containerTable);
 //	setLayout(hbox);
-	addWidget(containerTable);
+	addWidget(tabW);
 	Wt::WApplication::instance()->triggerUpdate();
 }
 void NodeDetails::showRequestErrorMessage(std::string msg) {
