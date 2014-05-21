@@ -134,7 +134,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 			Wt::WStandardItem *item1 = new Wt::WStandardItem();
 			item1->setData(sdt.timestamps.at(i));
 			Wt::WStandardItem *item2 = new Wt::WStandardItem();
-			item2->setData(sdt.values.at(i));
+			item2->setData(10 *i);
 			model->setItem(i,0, item1);
 			model->setItem(i,1, item2);
 		}
@@ -146,10 +146,9 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		chart->setLegendEnabled(false);
 		chart->setType(Wt::Chart::ScatterPlot);
 		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateScale);
-		chart->axis(Wt::Chart::YAxis).setScale(Wt::Chart::DateScale);
 
 		chart->setPlotAreaPadding(40, Wt::Left | Wt::Top | Wt::Bottom);
-		chart->setPlotAreaPadding(120, Wt::Right);
+		chart->setPlotAreaPadding(40, Wt::Right);
 
 
 		Wt::Chart::WDataSeries s(1, Wt::Chart::LineSeries);
