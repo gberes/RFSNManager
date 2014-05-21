@@ -32,7 +32,7 @@
 #include <Wt/WDateTime>
 //#include <Wt/WEnvironment>
 //#include <Wt/WPaintedWidget>
-//#include <Wt/WItemDelegate>
+#include <Wt/Chart/WAxis>
 #include <Wt/WShadow>
 #include <Wt/WStandardItem>
 #include <Wt/WStandardItemModel>
@@ -137,7 +137,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 			item2->setData(sdt.values.at(i));
 			model->setItem(i,0, item1);
 			model->setItem(i,1, item2);
-			std::cout<< " Adding to model: " << sdt.values.at(i) << std::endl();
+			std::cout<< " Adding to model: " << sdt.values.at(i) << std::endl;
 		}
 
 		Wt::Chart::WCartesianChart *chart = new Wt::Chart::WCartesianChart();
