@@ -24,6 +24,7 @@ RFSNManager::~RFSNManager() {
 RFSNManager::RFSNManager(const Wt::WEnvironment& env, std::string gwaddress)
   : Wt::WApplication(env),gatewayAddress(gwaddress), nodeList(this)
 {
+  WApplication::enableUpdates(true);
   setTitle("RF sensor network manager");
   useStyleSheet("/resources/themes/bootstrap/3/bootstrap.css");
   root()->addWidget(&nodeList);
@@ -32,7 +33,7 @@ RFSNManager::RFSNManager(const Wt::WEnvironment& env, std::string gwaddress)
 void RFSNManager::showNode(std::string address){
 	std::cout << "RFSNManager::showNode/" << __LINE__ << ": show node " << address << std::endl;
 	root()->addWidget(new NodeDetails(address, this));
-	root()->addWidget(new Wt::WText("pocsa"));
+	WApplication::triggerUpdate();
 }
 
 const std::string& RFSNManager::getGatewayAddress() const {
