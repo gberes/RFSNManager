@@ -100,6 +100,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	    }
 
 		Wt::WTable *table = new Wt::WTable();
+		table->addStyleClass("table");
 		table->setHeaderCount(1);
 		table->elementAt(0, 0)->addWidget(new Wt::WText("Timestamp"));
 		table->elementAt(0, 1)->addWidget(new Wt::WText("Value"));
