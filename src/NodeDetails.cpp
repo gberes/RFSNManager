@@ -24,7 +24,7 @@
 #include <Wt/WTabWidget>
 
 #include <Wt/Chart/WCartesianChart>
-//#include <Wt/Chart/WDataSeries>
+#include <Wt/Chart/WDataSeries>
 //#include <Wt/WAbstractItemModel>
 //#include <Wt/WAbstractItemView>
 //#include <Wt/WApplication>
@@ -33,7 +33,7 @@
 //#include <Wt/WEnvironment>
 //#include <Wt/WPaintedWidget>
 //#include <Wt/WItemDelegate>
-//#include <Wt/WShadow>
+#include <Wt/WShadow>
 #include <Wt/WStandardItem>
 #include <Wt/WStandardItemModel>
 //#include <Wt/WTableView>
@@ -143,9 +143,23 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		chart->setBackground(Wt::WColor(220, 220, 220));
 		chart->setModel(model);
 		chart->setXSeriesColumn(0);
-		chart->setLegendEnabled(true);
+		chart->setLegendEnabled(false);
 		chart->setType(Wt::Chart::ScatterPlot);
 		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateScale);
+
+		chart->setPlotAreaPadding(40, Wt::Left | Wt::Top | Wt::Bottom);
+		chart->setPlotAreaPadding(120, Wt::Right);
+
+		/*
+		 * Add the second and the third column as line series.
+		 */
+
+		Wt::Chart::WDataSeries s(1, Wt::Chart::LineSeries);
+		s.setShadow(Wt::WShadow(3, 3, Wt::WColor(0, 0, 0, 127), 3));
+		chart->addSeries(s);
+
+		chart->resize(400, 200);
+		chart->setMargin(Wt::WLength::Auto, Wt::Left | Wt::Right);
 
 		chartPanel->setCentralWidget(chart);
 		chartContainerTable->elementAt(typeNum/2, typeNum%2)->addWidget(chartPanel);
