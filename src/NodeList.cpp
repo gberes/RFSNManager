@@ -41,6 +41,7 @@ void NodeList::responseArrived(boost::system::error_code err, const Wt::Http::Me
 	}
 
 	addWidget(contents);
+	setWidth(250);
 }
 void NodeList::showRequestErrorMessage(std::string msg) {
 	addWidget(new Wt::WText(msg.c_str()));
