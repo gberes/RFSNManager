@@ -131,13 +131,13 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
 		for (unsigned i = 0; i < sdt.values.size(); i++) {
-			Wt::WStandardItem *item1 = new Wt::WStandardItem();
-			item1->setData(Wt::WDateTime(sdt.timestamps.at(i)));
-			Wt::WStandardItem *item2 = new Wt::WStandardItem();
-			item2->setData(sdt.values.at(i));
-			model->setItem(i,0, item1);
-			model->setItem(i,1, item2);
-			std::cout<< " Adding to model: " << sdt.values.at(i) << std::endl;
+//			Wt::WStandardItem *item1 = new Wt::WStandardItem();
+//			item1->setData(Wt::WDateTime(sdt.timestamps.at(i)));
+//			Wt::WStandardItem *item2 = new Wt::WStandardItem();
+//			item2->setData(sdt.values.at(i));
+			model->setData(i,0, boost::any(sdt.timestamps.at(i)));
+			model->setData(i,1, boost::any(sdt.values.at(i)));
+//			std::cout<< " Adding to model: " << sdt.values.at(i) << std::endl;
 		}
 
 		Wt::Chart::WCartesianChart *chart = new Wt::Chart::WCartesianChart();
