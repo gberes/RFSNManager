@@ -67,7 +67,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	tableContainerTable->setHeaderCount(0);
 
 	Wt::WTable *chartContainerTable = new Wt::WTable();
-	tableContainerTable->addStyleClass("table");
+	chartContainerTable->addStyleClass("table");
 	chartContainerTable->setHeaderCount(0);
 
 	struct SensorDataTable {
@@ -146,13 +146,11 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		chart->setLegendEnabled(false);
 		chart->setType(Wt::Chart::ScatterPlot);
 		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateScale);
+		chart->axis(Wt::Chart::YAxis).setScale(Wt::Chart::DateScale);
 
 		chart->setPlotAreaPadding(40, Wt::Left | Wt::Top | Wt::Bottom);
 		chart->setPlotAreaPadding(120, Wt::Right);
 
-		/*
-		 * Add the second and the third column as line series.
-		 */
 
 		Wt::Chart::WDataSeries s(1, Wt::Chart::LineSeries);
 		s.setShadow(Wt::WShadow(3, 3, Wt::WColor(0, 0, 0, 127), 3));
