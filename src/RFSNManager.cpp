@@ -32,8 +32,9 @@ RFSNManager::RFSNManager(const Wt::WEnvironment& env, std::string gwaddress)
 
 void RFSNManager::showNode(std::string address){
 	std::cout << "RFSNManager::showNode/" << __LINE__ << ": show node " << address << std::endl;
-	root()->addWidget(new NodeDetails(address, this));
-	WApplication::triggerUpdate();
+	boost::function<void(NodeDetails*)> addWidgetFunc = root()->addWidget(new NodeDetails(address, this));
+	WServer::instance()->post(WApplication::sessionId(), addWidgetFunc);
+	//root()->//addWidget(new NodeDetails(address, this));
 }
 
 const std::string& RFSNManager::getGatewayAddress() const {
