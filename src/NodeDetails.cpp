@@ -22,7 +22,8 @@
 #include <boost/date_time.hpp>
 #include "RFSNManager.h"
 #include <Wt/WTabWidget>
-
+#include <Wt/WAnimation>
+#include <Wt/WScrollArea>
 #include <Wt/Chart/WCartesianChart>
 #include <Wt/Chart/WDataSeries>
 //#include <Wt/WAbstractItemModel>
@@ -62,6 +63,9 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 	Wt::WTabWidget *tabW = new Wt::WTabWidget(this);
 
+	Wt::WScrollArea *tableScrollArea = new Wt::WScrollArea();
+	Wt::WScrollArea *chartScrollArea = new Wt::WScrollArea();
+
 	Wt::WTable *tableContainerTable = new Wt::WTable();
 	tableContainerTable->addStyleClass("table");
 	tableContainerTable->setHeaderCount(0);
@@ -86,6 +90,15 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		Wt::WPanel *chartPanel = new Wt::WPanel();
 		tablePanel->addStyleClass("centered-example");
 		chartPanel->addStyleClass("centered-example");
+
+		tablePanel->setCollapsible(true);
+		chartPanel->setCollapsible(true);
+
+		Wt::WAnimation animation(Wt::WAnimation::SlideInFromTop,Wt::WAnimation::EaseOut, 333);
+
+		tablePanel->setAnimation(animation);
+		chartPanel->setAnimation(animation);
+
 		switch (sdt.type){
 		case 0:
 			tablePanel->setTitle("Temperature");
@@ -126,18 +139,15 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		    table->elementAt(row, 1)->addWidget(new Wt::WText(Wt::WString::fromUTF8("{1}").arg(sdt.values.at(i))));
 		}
 
+
+
 		tablePanel->setCentralWidget(table);
 		tableContainerTable->elementAt(typeNum/2, typeNum%2)->addWidget(tablePanel);
 
 		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
 		for (unsigned i = 0; i < sdt.values.size(); i++) {
-//			Wt::WStandardItem *item1 = new Wt::WStandardItem();
-//			item1->setData(Wt::WDateTime(sdt.timestamps.at(i)));
-//			Wt::WStandardItem *item2 = new Wt::WStandardItem();
-//			item2->setData(sdt.values.at(i));
 			model->setData(i,0, boost::any(sdt.timestamps.at(i)));
 			model->setData(i,1, boost::any(sdt.values.at(i)));
-//			std::cout<< " Adding to model: " << sdt.values.at(i) << std::endl;
 		}
 
 		Wt::Chart::WCartesianChart *chart = new Wt::Chart::WCartesianChart();
@@ -166,11 +176,11 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		typeNum++;
 	}
 
-	tabW->addTab(tableContainerTable, "Tables", Wt::WTabWidget::PreLoading);
-	tabW->addTab(chartContainerTable, "Charts", Wt::WTabWidget::PreLoading);
-//	Wt::WHBoxLayout *hbox = new Wt::WHBoxLayout();
-//	hbox->addWidget(containerTable);
-//	setLayout(hbox);
+	tableScrollArea->addChild(tableContainerTable);
+	chartScrollArea->addChild(chartContainerTable);
+
+	tabW->addTab(tableScrollArea, "Tables", Wt::WTabWidget::PreLoading);
+	tabW->addTab(chartScrollArea, "Charts", Wt::WTabWidget::PreLoading);
 	addWidget(tabW);
 	Wt::WApplication::instance()->triggerUpdate();
 }
