@@ -60,6 +60,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	read_json(is, result);
 
 	Wt::WTable *containerTable = new Wt::WTable();
+	containerTable->addStyleClass("table");
 	containerTable->setHeaderCount(0);
 
 	struct SensorDataTable {
