@@ -65,6 +65,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 	Wt::WScrollArea *tableScrollArea = new Wt::WScrollArea();
 	Wt::WScrollArea *chartScrollArea = new Wt::WScrollArea();
+	tableScrollArea->setHeight(600);
 
 	Wt::WTable *tableContainerTable = new Wt::WTable();
 	tableContainerTable->addStyleClass("table");
@@ -178,8 +179,8 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 	tableScrollArea->setWidget(tableContainerTable);
 	chartScrollArea->setWidget(chartContainerTable);
-	tableScrollArea->setHorizontalScrollBarPolicy( Wt::WScrollArea::ScrollBarAlwaysOn);
-	chartScrollArea->setHorizontalScrollBarPolicy( Wt::WScrollArea::ScrollBarAlwaysOn);
+	tableScrollArea->setVerticalScrollBarPolicy( Wt::WScrollArea::ScrollBarAlwaysOn);
+	chartScrollArea->setVerticalScrollBarPolicy( Wt::WScrollArea::ScrollBarAlwaysOn);
 
 	tabW->addTab(tableScrollArea, "Tables", Wt::WTabWidget::PreLoading);
 	tabW->addTab(chartScrollArea, "Charts", Wt::WTabWidget::PreLoading);
