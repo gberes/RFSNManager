@@ -22,20 +22,21 @@
 #include <boost/date_time.hpp>
 #include "RFSNManager.h"
 
-#include <Wt/Chart/WCartesianChart>
-#include <Wt/Chart/WDataSeries>
-#include <Wt/WAbstractItemModel>
-#include <Wt/WAbstractItemView>
-#include <Wt/WApplication>
-#include <Wt/WContainerWidget>
-#include <Wt/WDate>
-#include <Wt/WEnvironment>
-#include <Wt/WPaintedWidget>
-#include <Wt/WItemDelegate>
-#include <Wt/WShadow>
-#include <Wt/WStandardItem>
-#include <Wt/WStandardItemModel>
-#include <Wt/WTableView>
+//#include <Wt/Chart/WCartesianChart>
+//#include <Wt/Chart/WDataSeries>
+//#include <Wt/WAbstractItemModel>
+//#include <Wt/WAbstractItemView>
+//#include <Wt/WApplication>
+//#include <Wt/WContainerWidget>
+//#include <Wt/WDate>
+//#include <Wt/WEnvironment>
+//#include <Wt/WPaintedWidget>
+//#include <Wt/WItemDelegate>
+//#include <Wt/WShadow>
+//#include <Wt/WStandardItem>
+//#include <Wt/WStandardItemModel>
+//#include <Wt/WTableView>
+#include <Wt/WVBoxLayout>
 
 namespace RFSNMAN {
 
@@ -71,6 +72,28 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		SensorDataTable sdt;
 		sdt.type = v.second.get<int>("type");
 
+		Wt::WPanel *panel = new Wt::WPanel();
+		panel->addStyleClass("centered-example");
+		switch (sdt.type){
+		case 0:
+			panel->setTitle("Temperature");
+			break;
+		case 1:
+			panel->setTitle("Light");
+			break;
+		case 2:
+			panel->setTitle("Voltage");
+			break;
+		case 3:
+			panel->setTitle("Current");
+			break;
+
+		}
+
+		Wt::WVBoxLayout *vbox = new Wt::WVBoxLayout();
+		Wt::WContainerWidget *cont = new  Wt::WContainerWidget();
+		cont->setLayout(vbox);
+
 
 
 	    BOOST_FOREACH(boost::property_tree::ptree::value_type &v2, v.second.get_child("values."))
@@ -92,26 +115,28 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		    table->elementAt(row, 1)->addWidget(new Wt::WText(Wt::WString::fromUTF8("{1}").arg(sdt.values.at(i))));
 		}
 
-		hbox->addWidget(table);
+		vbox->addWidget(table);
+		panel->setCentralWidget(cont);
+		hbox->addWidget(panel);
 
-		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
-		for (unsigned i = 0; i < sdt.values.size(); ++i) {
-			Wt::WStandardItem *item1 = new Wt::WStandardItem();
-			item1->setData(sdt.timestamps.at(i));
-			Wt::WStandardItem *item2 = new Wt::WStandardItem();
-			item2->setData(sdt.values.at(i));
-			model->setItem(i,0, item1);
-			model->setItem(i,1, item2);
-		}
+//		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
+//		for (unsigned i = 0; i < sdt.values.size(); ++i) {
+//			Wt::WStandardItem *item1 = new Wt::WStandardItem();
+//			item1->setData(sdt.timestamps.at(i));
+//			Wt::WStandardItem *item2 = new Wt::WStandardItem();
+//			item2->setData(sdt.values.at(i));
+//			model->setItem(i,0, item1);
+//			model->setItem(i,1, item2);
+//		}
 
-		Wt::Chart::WCartesianChart *chart = new Wt::Chart::WCartesianChart();
-		chart->setBackground(Wt::WColor(220, 220, 220));
-		chart->setModel(model);
-		chart->setXSeriesColumn(0);
-		chart->setLegendEnabled(true);
-		chart->setType(Wt::Chart::ScatterPlot);
-		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateScale);
-		hbox->addWidget(chart);
+//		Wt::Chart::WCartesianChart *chart = new Wt::Chart::WCartesianChart();
+//		chart->setBackground(Wt::WColor(220, 220, 220));
+//		chart->setModel(model);
+//		chart->setXSeriesColumn(0);
+//		chart->setLegendEnabled(true);
+//		chart->setType(Wt::Chart::ScatterPlot);
+//		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateScale);
+//		hbox->addWidget(chart);
 	}
 
 
