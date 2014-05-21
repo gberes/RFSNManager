@@ -32,7 +32,7 @@
 #include <Wt/WDateTime>
 //#include <Wt/WEnvironment>
 //#include <Wt/WPaintedWidget>
-#include <Wt/Chart/WAxis>
+//#include <Wt/Chart/WAxis>
 #include <Wt/WShadow>
 #include <Wt/WStandardItem>
 #include <Wt/WStandardItemModel>
@@ -147,9 +147,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		chart->setLegendEnabled(false);
 		chart->setType(Wt::Chart::ScatterPlot);
 
-		Wt::Chart::WAxis& x_axis  = chart->axis(Wt::Chart::Axis::XAxis);
-		Wt::Chart::WAxis& y1_axis = chart->axis(Wt::Chart::Axis::Y1Axis);
-		x_axis.setScale(Wt::Chart::DateTimeScale );
+		chart->axis(Wt::Chart::XAxis).setScale(Wt::Chart::DateTimeScale );
 
 		chart->setPlotAreaPadding(40, Wt::Left | Wt::Top | Wt::Bottom);
 		chart->setPlotAreaPadding(40, Wt::Right);
