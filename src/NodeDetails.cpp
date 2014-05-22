@@ -111,7 +111,6 @@ void NodeDetails::pollResponseArrived(boost::system::error_code err, const Wt::H
 	float value = result.get<float>("measure.value");
 	Wt::WServer::instance()->post(manager->sessionId(), boost::bind(&NodeDetails::postCurrentValue, this, type, value));
 
-	addWidget(contents);
 }
 
 void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http::Message& response) {
