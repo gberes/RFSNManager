@@ -44,7 +44,6 @@ void RFSNManager::showNode(std::string address){
 		layout->removeWidget(currentNode);
 		// todo delete?
 	}
-	std::cout << "RFSNManager::showNode/" << __LINE__ << ": show node " << address << std::endl;
 	Wt::WServer::instance()->post(WApplication::sessionId(), boost::bind(&Wt::WBorderLayout::addWidget, layout, new NodeDetails(address, this), Wt::WBorderLayout::Center));
 }
 

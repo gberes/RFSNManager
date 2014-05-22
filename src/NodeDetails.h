@@ -37,6 +37,7 @@ public:
 	void showRequestErrorMessage(std::string msg);
 	void handleTabChange(int index);
 	void pollCurrentValues();
+	void postCurrentValue(int type, float value);
 
 protected:
 	RFSNManager* manager;
@@ -45,6 +46,11 @@ protected:
 
 	Wt::WTabWidget *tabW;
 	Wt::WContainerWidget* currentValuesContainer;
+
+	Wt::WText* tempValueText;
+	Wt::WText* lightValueText;
+	Wt::WText* voltageValueText;
+	Wt::WText* currentValueText;
 
 	std::string address;
 	bool pollRunning;

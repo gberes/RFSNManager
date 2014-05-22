@@ -13,6 +13,16 @@
 #include <Wt/WText>
 #include <Wt/WTable>
 #include <Wt/WHBoxLayout>
+#include <Wt/WServer>
+#include <Wt/WTabWidget>
+#include <Wt/WAnimation>
+#include <Wt/WScrollArea>
+#include <Wt/Chart/WCartesianChart>
+#include <Wt/Chart/WDataSeries>
+#include <Wt/WDateTime>
+#include <Wt/WStandardItem>
+#include <Wt/WStandardItemModel>
+#include <Wt/WVBoxLayout>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
@@ -22,24 +32,7 @@
 #include <iostream>
 #include <boost/date_time.hpp>
 #include "RFSNManager.h"
-#include <Wt/WTabWidget>
-#include <Wt/WAnimation>
-#include <Wt/WScrollArea>
-#include <Wt/Chart/WCartesianChart>
-#include <Wt/Chart/WDataSeries>
-//#include <Wt/WAbstractItemModel>
-//#include <Wt/WAbstractItemView>
-//#include <Wt/WApplication>
-//#include <Wt/WContainerWidget>
-#include <Wt/WDateTime>
-//#include <Wt/WEnvironment>
-//#include <Wt/WPaintedWidget>
-//#include <Wt/Chart/WAxis>
-#include <Wt/WShadow>
-#include <Wt/WStandardItem>
-#include <Wt/WStandardItemModel>
-//#include <Wt/WTableView>
-#include <Wt/WVBoxLayout>
+
 
 
 namespace RFSNMAN {
@@ -69,7 +62,7 @@ void NodeDetails::handleTabChange(int index){
 
 void NodeDetails::pollCurrentValues(){
 	boost::posix_time::seconds delay(2);
-	boost::posix_time::milliseconds shortDelay(100);
+	boost::posix_time::milliseconds shortDelay(500);
 
 	Wt::Http::Client *client = new Wt::Http::Client(Wt::WApplication::instance());
 	client->setTimeout(15);
@@ -88,8 +81,37 @@ void NodeDetails::pollCurrentValues(){
 	}
 }
 
+void NodeDetails::postCurrentValue(int type, float value){
+	std::stringstream val;
+	val << value;
+
+	switch(type){
+	case 0:
+		tempValueText->setText(val.str().c_str());
+		break;
+	case 1:
+		lightValueText->setText(val.str().c_str());
+		break;
+	case 2:
+		voltageValueText->setText(val.str().c_str());
+		break;
+	case 3:
+		currentValueText->setText(val.str().c_str());
+		break;
+
+	}
+}
+
 void NodeDetails::pollResponseArrived(boost::system::error_code err, const Wt::Http::Message& response){
-	std::cout << "NodeDetails::pollResponseArrived/" << __LINE__ << ": " << std::endl;
+	boost::property_tree::ptree result;
+	std::istringstream is(response.body());
+	read_json(is, result);
+
+	int type = result.get<int>("type");
+	float value = result.get<float>("value");
+	Wt::WServer::instance()->post(manager->sessionId(), boost::bind(&NodeDetails::postCurrentValue, this, type, value));
+
+	addWidget(contents);
 }
 
 void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http::Message& response) {
@@ -101,6 +123,24 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 	currentValuesContainer = new Wt::WContainerWidget();
 	currentValuesContainer->addWidget(new Wt::WText("current"));
+
+	Wt::WTable *currentValuesTable= new Wt::WTable();
+	currentValuesTable->addStyleClass("table");
+	currentValuesTable->setHeaderCount(1);
+	currentValuesTable->elementAt(0, 0)->addWidget(new Wt::WText("Temerature"));
+	currentValuesTable->elementAt(0, 1)->addWidget(new Wt::WText("Light"));
+	currentValuesTable->elementAt(0, 2)->addWidget(new Wt::WText("Voltage"));
+	currentValuesTable->elementAt(0, 3)->addWidget(new Wt::WText("Current"));
+
+	tempValueText = new Wt::WText("-");
+	lightValueText = new Wt::WText("-");
+	voltageValueText = new Wt::WText("-");
+	currentValueText = new Wt::WText("-");
+
+	currentValuesTable->elementAt(1, 0)->addWidget(currentValuesTable);
+	currentValuesTable->elementAt(1, 1)->addWidget(lightValueText);
+	currentValuesTable->elementAt(1, 2)->addWidget(voltageValueText);
+	currentValuesTable->elementAt(1, 3)->addWidget(currentValueText);
 
 	Wt::WScrollArea *tableScrollArea = new Wt::WScrollArea();
 	Wt::WScrollArea *chartScrollArea = new Wt::WScrollArea();
