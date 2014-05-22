@@ -110,8 +110,8 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		Wt::WAnimation tableAnimation(Wt::WAnimation::SlideInFromTop,Wt::WAnimation::EaseOut, 333);
 		Wt::WAnimation chartAnimation(Wt::WAnimation::SlideInFromTop,Wt::WAnimation::EaseOut, 333);
 
-		tablePanel->setAnimation(tableAnimation);
-		chartPanel->setAnimation(chartAnimation);
+		//tablePanel->setAnimation(tableAnimation);
+		//chartPanel->setAnimation(chartAnimation);
 
 		switch (sdt.type){
 		case 0:
