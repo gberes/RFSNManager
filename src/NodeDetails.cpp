@@ -197,10 +197,10 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	tableScrollArea->setVerticalScrollBarPolicy( Wt::WScrollArea::ScrollBarAlwaysOn);
 	chartScrollArea->setVerticalScrollBarPolicy( Wt::WScrollArea::ScrollBarAlwaysOn);
 
-	tabW->addTab(tableScrollArea, "Tables", Wt::WTabWidget::PreLoading);
-	tabW->addTab(chartScrollArea, "Charts", Wt::WTabWidget::PreLoading);
+	tabW->addTab(tableScrollArea, "Tables");
+	tabW->addTab(chartScrollArea, "Charts");
 	addWidget(tabW);
-	//Wt::WApplication::instance()->triggerUpdate();
+	Wt::WApplication::instance()->triggerUpdate();
 }
 void NodeDetails::showRequestErrorMessage(std::string msg) {
 	addWidget(new Wt::WText(msg.c_str()));
