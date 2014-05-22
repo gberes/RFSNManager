@@ -48,6 +48,7 @@ NodeDetails::NodeDetails(std::string address, RFSNManager* manager) :
 }
 
 NodeDetails::~NodeDetails() {
+	pollRunning = false;
 	//delete contents;
 }
 
@@ -61,7 +62,7 @@ void NodeDetails::handleTabChange(int index){
 }
 
 void NodeDetails::pollCurrentValues(){
-	boost::posix_time::seconds delay(2);
+	boost::posix_time::seconds delay(180);
 
 	Wt::Http::Client *client = new Wt::Http::Client(Wt::WApplication::instance());
 	client->setTimeout(15);
