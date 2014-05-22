@@ -16,6 +16,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
+#include <boost/thread.hpp>
 #include <sstream>
 #include <vector>
 #include <iostream>
@@ -40,6 +41,7 @@
 //#include <Wt/WTableView>
 #include <Wt/WVBoxLayout>
 
+
 namespace RFSNMAN {
 
 NodeDetails::NodeDetails(std::string address, RFSNManager* manager) :
@@ -49,10 +51,26 @@ NodeDetails::NodeDetails(std::string address, RFSNManager* manager) :
 	std::stringstream url;
 	url << "http://" << manager->getGatewayAddress() << "/getsensordata/by-address/" << address;
 	getRequest(url.str());
+	pollRunning = false;
 }
 
 NodeDetails::~NodeDetails() {
 	//delete contents;
+}
+
+void NodeDetails::handleTabChange(int index){
+	if (currentValuesContainer == tabW->currentWidget()){
+		pollRunning = true;
+		boost::thread pollThread = boost::thread(&NodeDetails::pollCurrentValues, this);
+	} else {
+		pollRunning = false;
+	}
+}
+
+void NodeDetails::pollCurrentValues(){
+	while (pollRunning){
+		std::cout <<"runnn" << std::endl;
+	}
 }
 
 void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http::Message& response) {
@@ -60,7 +78,10 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	std::istringstream is(response.body());
 	read_json(is, result);
 
-	Wt::WTabWidget *tabW = new Wt::WTabWidget(this);
+	tabW = new Wt::WTabWidget(this);
+
+	currentValuesContainer = new Wt::WContainerWidget();
+	currentValuesContainer->addWidget(new Wt::WText("current"));
 
 	Wt::WScrollArea *tableScrollArea = new Wt::WScrollArea();
 	Wt::WScrollArea *chartScrollArea = new Wt::WScrollArea();
@@ -199,6 +220,8 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 	tabW->addTab(tableScrollArea, "Tables");
 	tabW->addTab(chartScrollArea, "Charts");
+	tabW->addTab(currentValuesContainer, "Current values");
+	tabW->currentChanged().connect(boost::bind(&NodeDetails::handleTabChange, this, _1));
 	addWidget(tabW);
 	Wt::WApplication::instance()->triggerUpdate();
 }

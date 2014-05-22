@@ -18,6 +18,7 @@ namespace Wt{
 namespace Http{
 class Message;
 }
+class WTabWidget;
 class WStackedWidget;
 class WPanel;
 }
@@ -33,12 +34,19 @@ public:
 
 	void responseArrived(boost::system::error_code err, const Wt::Http::Message& response);
 	void showRequestErrorMessage(std::string msg);
+	void handleTabChange(int index);
+	void pollCurrentValues();
 
 protected:
 	RFSNManager* manager;
 	Wt::WStackedWidget* contents;
 	Wt::WPanel* panel;
+
+	Wt::WTabWidget *tabW;
+	Wt::WContainerWidget* currentValuesContainer;
+
 	std::string address;
+	bool pollRunning;
 };
 
 } /* namespace RFSNMAN */
