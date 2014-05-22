@@ -122,12 +122,12 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	tabW = new Wt::WTabWidget(this);
 
 	currentValuesContainer = new Wt::WContainerWidget();
-	currentValuesContainer->addWidget(new Wt::WText("current"));
+
 
 	Wt::WTable *currentValuesTable= new Wt::WTable();
 	currentValuesTable->addStyleClass("table");
 	currentValuesTable->setHeaderCount(1);
-	currentValuesTable->elementAt(0, 0)->addWidget(new Wt::WText("Temerature"));
+	currentValuesTable->elementAt(0, 0)->addWidget(new Wt::WText("Temperature"));
 	currentValuesTable->elementAt(0, 1)->addWidget(new Wt::WText("Light"));
 	currentValuesTable->elementAt(0, 2)->addWidget(new Wt::WText("Voltage"));
 	currentValuesTable->elementAt(0, 3)->addWidget(new Wt::WText("Current"));
@@ -137,10 +137,11 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	voltageValueText = new Wt::WText("-");
 	currentValueText = new Wt::WText("-");
 
-	currentValuesTable->elementAt(1, 0)->addWidget(currentValuesTable);
+	currentValuesTable->elementAt(1, 0)->addWidget(tempValueText);
 	currentValuesTable->elementAt(1, 1)->addWidget(lightValueText);
 	currentValuesTable->elementAt(1, 2)->addWidget(voltageValueText);
 	currentValuesTable->elementAt(1, 3)->addWidget(currentValueText);
+	currentValuesContainer->addWidget(currentValuesTable);
 
 	Wt::WScrollArea *tableScrollArea = new Wt::WScrollArea();
 	Wt::WScrollArea *chartScrollArea = new Wt::WScrollArea();
