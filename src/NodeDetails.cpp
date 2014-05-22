@@ -59,21 +59,37 @@ NodeDetails::~NodeDetails() {
 }
 
 void NodeDetails::handleTabChange(int index){
-	std::cout << "NodeDetails::handleTabChange/" << __LINE__ << ": handlechange: " << index  << std::endl;
 	if (index == tabW->indexOf(currentValuesContainer)){
-		std::cout << "NodeDetails::handleTabChange/" << __LINE__ << ": oks" << std::endl;
 		pollRunning = true;
 		boost::thread pollThread = boost::thread(&NodeDetails::pollCurrentValues, this);
 	} else {
-		std::cout << "NodeDetails::handleTabChange/" << __LINE__ << ": nogod" << std::endl;
 		pollRunning = false;
 	}
 }
 
 void NodeDetails::pollCurrentValues(){
+	boost::posix_time::seconds delay(2);
+	boost::posix_time::milliseconds shortDelay(100);
+
+	Wt::Http::Client *client = new Wt::Http::Client(Wt::WApplication::instance());
+	client->setTimeout(15);
+	client->setMaximumResponseSize(10 * 1024);
+	client->done().connect(boost::bind(&NodeDetails::pollResponseArrived, this, _1, _2));
+
 	while (pollRunning){
 		std::cout <<"runnn" << std::endl;
+		boost::this_thread::sleep(delay);
+		for (int i=0; i<4; i++){
+			std::stringstream url;
+			url << "http://" << manager->getGatewayAddress() << "/measuresensordata/by-address/" << address << "/" <<i;
+			client->get(url.str());
+			boost::this_thread::sleep(shortDelay);
+		}
 	}
+}
+
+void NodeDetails::pollResponseArrived(boost::system::error_code err, const Wt::Http::Message& response){
+	std::cout << "NodeDetails::pollResponseArrived/" << __LINE__ << ": " << std::endl;
 }
 
 void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http::Message& response) {

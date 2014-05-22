@@ -33,6 +33,7 @@ public:
 	virtual ~NodeDetails();
 
 	void responseArrived(boost::system::error_code err, const Wt::Http::Message& response);
+	void pollResponseArrived(boost::system::error_code err, const Wt::Http::Message& response);
 	void showRequestErrorMessage(std::string msg);
 	void handleTabChange(int index);
 	void pollCurrentValues();
