@@ -160,7 +160,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		tablePanel->setCentralWidget(table);
 		tableContainerTable->elementAt(typeNum/2, typeNum%2)->addWidget(tablePanel);
 
-		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
+		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2, NULL);
 		for (unsigned i = 0; i < sdt.values.size(); i++) {
 			model->setData(i,0, boost::any(sdt.timestamps.at(i)));
 			model->setData(i,1, boost::any(sdt.values.at(i)));
