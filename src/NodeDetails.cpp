@@ -107,9 +107,13 @@ void NodeDetails::pollResponseArrived(boost::system::error_code err, const Wt::H
 	std::istringstream is(response.body());
 	read_json(is, result);
 
-	int type = result.get<int>("measure.type");
-	float value = result.get<float>("measure.value");
-	Wt::WServer::instance()->post(manager->sessionId(), boost::bind(&NodeDetails::postCurrentValue, this, type, value));
+	try {
+		int type = result.get<int>("measure.type");
+		float value = result.get<float>("measure.value");
+		Wt::WServer::instance()->post(manager->sessionId(), boost::bind(&NodeDetails::postCurrentValue, this, type, value));
+	} catch(...){
+
+	}
 
 }
 
