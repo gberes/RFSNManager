@@ -62,7 +62,7 @@ void NodeDetails::handleTabChange(int index){
 }
 
 void NodeDetails::pollCurrentValues(){
-	boost::posix_time::seconds delay(180);
+	boost::posix_time::microseconds delay(2500);
 
 	Wt::Http::Client *client = new Wt::Http::Client(Wt::WApplication::instance());
 	client->setTimeout(15);
