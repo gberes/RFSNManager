@@ -144,6 +144,9 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		table->elementAt(0, 0)->addWidget(new Wt::WText("Timestamp"));
 		table->elementAt(0, 1)->addWidget(new Wt::WText("Value"));
 
+		table->toggleStyleClass("table-hover", true);
+		table->toggleStyleClass("table-striped", true);
+
 		for (unsigned i = 0; i < sdt.values.size(); ++i) {
 		    int row = i + 1;
 
