@@ -107,8 +107,8 @@ void NodeDetails::pollResponseArrived(boost::system::error_code err, const Wt::H
 	std::istringstream is(response.body());
 	read_json(is, result);
 
-	int type = result.get<int>("type");
-	float value = result.get<float>("value");
+	int type = result.get<int>(".type");
+	float value = result.get<float>(".value");
 	Wt::WServer::instance()->post(manager->sessionId(), boost::bind(&NodeDetails::postCurrentValue, this, type, value));
 
 	addWidget(contents);
