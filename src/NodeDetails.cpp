@@ -59,8 +59,8 @@ NodeDetails::~NodeDetails() {
 }
 
 void NodeDetails::handleTabChange(int index){
-	std::cout << "NodeDetails::handleTabChange/" << __LINE__ << ": handlechange" << std::endl;
-	if (currentValuesContainer == tabW->currentWidget()){
+	std::cout << "NodeDetails::handleTabChange/" << __LINE__ << ": handlechange: " << index  << std::endl;
+	if (index == tabW->indexOf(currentValuesContainer)){
 		std::cout << "NodeDetails::handleTabChange/" << __LINE__ << ": oks" << std::endl;
 		pollRunning = true;
 		boost::thread pollThread = boost::thread(&NodeDetails::pollCurrentValues, this);
