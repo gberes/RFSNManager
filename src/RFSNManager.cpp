@@ -11,6 +11,7 @@
 #include <Wt/WContainerWidget>
 #include <Wt/WLineEdit>
 #include <Wt/WPushButton>
+#include <Wt/WText>
 #include <Wt/WServer>
 #include <Wt/WBorderLayout>
 #include <iostream>
@@ -33,6 +34,8 @@ RFSNManager::RFSNManager(const Wt::WEnvironment& env, std::string gwaddress)
   layout = new Wt::WBorderLayout();
   root()->setLayout(layout);
   layout->addWidget(&nodeList, Wt::WBorderLayout::West);
+  layout->addWidget(new Wt::WText("<h1>RF sensor network manager</h1>"), Wt::WBorderLayout::North);
+  layout->addWidget(new Wt::WText("<h2>Please select a node</h2>"), Wt::WBorderLayout::Center);
 }
 
 void RFSNManager::showNode(std::string address){
