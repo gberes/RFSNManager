@@ -42,7 +42,7 @@ NodeDetails::NodeDetails(std::string address, RFSNManager* manager) :
 	address(address){
 //	contents = new Wt::WStackedWidget(this);
 	std::stringstream url;
-	url << "http://" << manager->getGatewayAddress() << "/getsensordata/by-address/" << address;
+	url << "http://" << manager->getGatewayAddress() << "/getsensordata/by-address/" << address<<"/?limit=15";
 	getRequest(url.str());
 	pollRunning = false;
 }
