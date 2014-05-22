@@ -92,8 +92,11 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	int typeNum = 0;
 
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v,result.get_child("sensordatas")) {
+
 		SensorDataTable sdt;
 		sdt.type = v.second.get<int>("type");
+
+		std::cout<<"00000000000000000000000000000000"<<"in foreach type: " << sdt.type << std::endl;
 
 		Wt::WPanel *tablePanel = new Wt::WPanel();
 		Wt::WPanel *chartPanel = new Wt::WPanel();
@@ -113,20 +116,20 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 		switch (sdt.type){
 		case 0:
-			tablePanel->setTitle("Temperaturet");
-			chartPanel->setTitle("Temperaturec");
+			tablePanel->setTitle("Temperature");
+			chartPanel->setTitle("Temperature");
 			break;
 		case 1:
-			tablePanel->setTitle("Lightt");
-			chartPanel->setTitle("Lightc");
+			tablePanel->setTitle("Light");
+			chartPanel->setTitle("Light");
 			break;
 		case 2:
-			tablePanel->setTitle("Voltaget");
-			chartPanel->setTitle("Voltagec");
+			tablePanel->setTitle("Voltage");
+			chartPanel->setTitle("Voltage");
 			break;
 		case 3:
-			tablePanel->setTitle("Currentt");
-			chartPanel->setTitle("Currentc");
+			tablePanel->setTitle("Current");
+			chartPanel->setTitle("Current");
 			break;
 
 		}
@@ -186,6 +189,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		chart->setMargin(Wt::WLength::Auto, Wt::Left | Wt::Right);
 
 		chartPanel->setCentralWidget(chart);
+		std::cout<<"1111111111111111111111111111111"<<"adding chart " << sdt.type << std::endl;
 		chartContainerTable->elementAt(typeNum/2, typeNum%2)->addWidget(chartPanel);
 
 		typeNum++;
