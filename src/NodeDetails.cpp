@@ -100,8 +100,8 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		tablePanel->addStyleClass("centered-example");
 		chartPanel->addStyleClass("centered-example");
 
-		tablePanel->setCollapsible(true);
-		chartPanel->setCollapsible(true);
+		//tablePanel->setCollapsible(true);
+		//chartPanel->setCollapsible(true);
 
 		tablePanel->setWidth(450);
 		chartPanel->setWidth(450);
