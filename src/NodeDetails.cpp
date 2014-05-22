@@ -62,7 +62,6 @@ void NodeDetails::handleTabChange(int index){
 
 void NodeDetails::pollCurrentValues(){
 	boost::posix_time::seconds delay(2);
-	boost::posix_time::milliseconds shortDelay(500);
 
 	Wt::Http::Client *client = new Wt::Http::Client(Wt::WApplication::instance());
 	client->setTimeout(15);
@@ -71,12 +70,11 @@ void NodeDetails::pollCurrentValues(){
 
 	while (pollRunning){
 		std::cout <<"runnn" << std::endl;
-		boost::this_thread::sleep(delay);
 		for (int i=0; i<4; i++){
 			std::stringstream url;
 			url << "http://" << manager->getGatewayAddress() << "/measuresensordata/by-address/" << address << "/" <<i;
 			client->get(url.str());
-			boost::this_thread::sleep(shortDelay);
+			boost::this_thread::sleep(delay);
 		}
 	}
 }
