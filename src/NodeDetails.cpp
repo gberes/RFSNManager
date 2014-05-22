@@ -100,6 +100,7 @@ void NodeDetails::postCurrentValue(int type, float value){
 		break;
 
 	}
+	Wt::WApplication::instance()->triggerUpdate();
 }
 
 void NodeDetails::pollResponseArrived(boost::system::error_code err, const Wt::Http::Message& response){
@@ -112,7 +113,7 @@ void NodeDetails::pollResponseArrived(boost::system::error_code err, const Wt::H
 		float value = result.get<float>("measure.value");
 		Wt::WServer::instance()->post(manager->sessionId(), boost::bind(&NodeDetails::postCurrentValue, this, type, value));
 	} catch(...){
-
+		std::cout << "NodeDetails::pollResponseArrived/" << __LINE__ << ": catch" << std::endl;
 	}
 
 }
