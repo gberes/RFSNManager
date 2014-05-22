@@ -84,7 +84,7 @@ void NodeDetails::pollCurrentValues(){
 void NodeDetails::postCurrentValue(int type, float value){
 	std::stringstream val;
 	val << value;
-	std::cout << "post type: " << type << ", value: " << value << std::endl;
+	std::cout << "OOOOOO post type: " << type << ", value: " << value << std::endl;
 
 	switch(type){
 	case 0:
@@ -112,6 +112,7 @@ void NodeDetails::pollResponseArrived(boost::system::error_code err, const Wt::H
 	try {
 		int type = result.get<int>("measure.type");
 		float value = result.get<float>("measure.value");
+		std::cout << "OOOOOO response type: " << type << ", value: " << value << std::endl;
 		Wt::WServer::instance()->post(manager->sessionId(), boost::bind(&NodeDetails::postCurrentValue, this, type, value));
 	} catch(...){
 		std::cout << "NodeDetails::pollResponseArrived/" << __LINE__ << ": catch" << std::endl;
