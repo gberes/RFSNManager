@@ -96,8 +96,6 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		SensorDataTable sdt;
 		sdt.type = v.second.get<int>("type");
 
-		std::cout<<"00000000000000000000000000000000"<<"in foreach type: " << sdt.type << std::endl;
-
 		Wt::WPanel *tablePanel = new Wt::WPanel();
 		Wt::WPanel *chartPanel = new Wt::WPanel();
 		tablePanel->addStyleClass("centered-example");
@@ -109,10 +107,11 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		tablePanel->setWidth(450);
 		chartPanel->setWidth(450);
 
-		Wt::WAnimation animation(Wt::WAnimation::SlideInFromTop,Wt::WAnimation::EaseOut, 333);
+		Wt::WAnimation tableAnimation(Wt::WAnimation::SlideInFromTop,Wt::WAnimation::EaseOut, 333);
+		Wt::WAnimation chartAnimation(Wt::WAnimation::SlideInFromTop,Wt::WAnimation::EaseOut, 333);
 
-		tablePanel->setAnimation(animation);
-		chartPanel->setAnimation(animation);
+		tablePanel->setAnimation(tableAnimation);
+		chartPanel->setAnimation(chartAnimation);
 
 		switch (sdt.type){
 		case 0:
@@ -189,7 +188,6 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		chart->setMargin(Wt::WLength::Auto, Wt::Left | Wt::Right);
 
 		chartPanel->setCentralWidget(chart);
-		std::cout<<"1111111111111111111111111111111"<<"adding chart " << sdt.type << std::endl;
 		chartContainerTable->elementAt(typeNum/2, typeNum%2)->addWidget(chartPanel);
 
 		typeNum++;
