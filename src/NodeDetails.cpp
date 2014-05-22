@@ -65,7 +65,10 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 	Wt::WScrollArea *tableScrollArea = new Wt::WScrollArea();
 	Wt::WScrollArea *chartScrollArea = new Wt::WScrollArea();
+	chartScrollArea->setHeight(600);
+	chartScrollArea->addStyleClass("bordered");
 	tableScrollArea->setHeight(600);
+	tableScrollArea->addStyleClass("bordered");
 
 	Wt::WTable *tableContainerTable = new Wt::WTable();
 	tableContainerTable->addStyleClass("table");
@@ -94,6 +97,9 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 		tablePanel->setCollapsible(true);
 		chartPanel->setCollapsible(true);
+
+		tablePanel->setWidth(350);
+		chartPanel->setWidth(350);
 
 		Wt::WAnimation animation(Wt::WAnimation::SlideInFromTop,Wt::WAnimation::EaseOut, 333);
 

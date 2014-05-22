@@ -29,6 +29,7 @@ RFSNManager::RFSNManager(const Wt::WEnvironment& env, std::string gwaddress)
   WApplication::enableUpdates(true);
   setTitle("RF sensor network manager");
   useStyleSheet("/resources/themes/bootstrap/3/bootstrap.css");
+  useStyleSheet("/resources/mystyles.css");
   layout = new Wt::WBorderLayout();
   root()->setLayout(layout);
   layout->addWidget(&nodeList, Wt::WBorderLayout::West);
