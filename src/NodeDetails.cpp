@@ -66,17 +66,22 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	Wt::WScrollArea *tableScrollArea = new Wt::WScrollArea();
 	Wt::WScrollArea *chartScrollArea = new Wt::WScrollArea();
 	chartScrollArea->setHeight(600);
+	chartScrollArea->setWidth(950);
 	chartScrollArea->addStyleClass("bordered");
 	tableScrollArea->setHeight(600);
+	tableScrollArea->setWidth(950);
 	tableScrollArea->addStyleClass("bordered");
 
 	Wt::WTable *tableContainerTable = new Wt::WTable();
 	tableContainerTable->addStyleClass("table");
 	tableContainerTable->setHeaderCount(0);
+	tableContainerTable->setWidth(930);
 
 	Wt::WTable *chartContainerTable = new Wt::WTable();
 	chartContainerTable->addStyleClass("table");
 	chartContainerTable->setHeaderCount(0);
+	chartContainerTable->setWidth(930);
+
 
 	struct SensorDataTable {
 		int type;
@@ -98,8 +103,8 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		tablePanel->setCollapsible(true);
 		chartPanel->setCollapsible(true);
 
-		tablePanel->setWidth(350);
-		chartPanel->setWidth(350);
+		tablePanel->setWidth(450);
+		chartPanel->setWidth(450);
 
 		Wt::WAnimation animation(Wt::WAnimation::SlideInFromTop,Wt::WAnimation::EaseOut, 333);
 
