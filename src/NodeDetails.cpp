@@ -84,6 +84,7 @@ void NodeDetails::pollCurrentValues(){
 void NodeDetails::postCurrentValue(int type, float value){
 	std::stringstream val;
 	val << value;
+	std::cout << "post type: " << type << ", value: " << value << std::endl;
 
 	switch(type){
 	case 0:
