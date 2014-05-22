@@ -66,10 +66,10 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	Wt::WScrollArea *tableScrollArea = new Wt::WScrollArea();
 	Wt::WScrollArea *chartScrollArea = new Wt::WScrollArea();
 	chartScrollArea->setHeight(600);
-	chartScrollArea->setWidth(950);
+	chartScrollArea->setWidth(960);
 	chartScrollArea->addStyleClass("bordered");
 	tableScrollArea->setHeight(600);
-	tableScrollArea->setWidth(950);
+	tableScrollArea->setWidth(960);
 	tableScrollArea->addStyleClass("bordered");
 
 	Wt::WTable *tableContainerTable = new Wt::WTable();
@@ -113,20 +113,20 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 
 		switch (sdt.type){
 		case 0:
-			tablePanel->setTitle("Temperature");
-			chartPanel->setTitle("Temperature");
+			tablePanel->setTitle("Temperaturet");
+			chartPanel->setTitle("Temperaturec");
 			break;
 		case 1:
-			tablePanel->setTitle("Light");
-			chartPanel->setTitle("Light");
+			tablePanel->setTitle("Lightt");
+			chartPanel->setTitle("Lightc");
 			break;
 		case 2:
-			tablePanel->setTitle("Voltage");
-			chartPanel->setTitle("Voltage");
+			tablePanel->setTitle("Voltaget");
+			chartPanel->setTitle("Voltagec");
 			break;
 		case 3:
-			tablePanel->setTitle("Current");
-			chartPanel->setTitle("Current");
+			tablePanel->setTitle("Currentt");
+			chartPanel->setTitle("Currentc");
 			break;
 
 		}
