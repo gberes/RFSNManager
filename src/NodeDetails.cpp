@@ -57,7 +57,6 @@ NodeDetails::~NodeDetails() {
 
 void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http::Message& response) {
 	boost::property_tree::ptree result;
-	std::cout << "NodeDetails::responseArrived/" << __LINE__ << ": respone: " << response.body() << std::endl;
 	std::istringstream is(response.body());
 	read_json(is, result);
 

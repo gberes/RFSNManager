@@ -22,21 +22,17 @@ RequestBase::~RequestBase() {
 }
 
 void RequestBase::getRequest(std::string url){
-	std::cout << "RequestBase::getRequest/" << __LINE__ << ": " << std::endl;
 	Wt::Http::Client *client = new Wt::Http::Client(Wt::WApplication::instance());
 	client->setTimeout(15);
 	client->setMaximumResponseSize(10 * 1024);
 	client->done().connect(boost::bind(&RequestBase::handleHttpResponse, this, _1, _2));
 
 	if (client->get(url.c_str())){
-		std::cout << "RequestBase::getRequest/" << __LINE__ << ": get ok" << std::endl;
 	} else {
-		std::cout << "RequestBase::getRequest/" << __LINE__ << ": get fail" << std::endl;
 	}
 }
 
 void RequestBase::handleHttpResponse(boost::system::error_code err, const Wt::Http::Message& response) {
-	std::cout << "RequestBase::handleHttpResponse/" << __LINE__ << ": " << std::endl;
 	if (response.status() == 200){
 		responseArrived(err,response);
 	} else {
