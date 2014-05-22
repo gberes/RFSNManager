@@ -100,8 +100,8 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		tablePanel->addStyleClass("centered-example");
 		chartPanel->addStyleClass("centered-example");
 
-		//tablePanel->setCollapsible(true);
-		//chartPanel->setCollapsible(true);
+		tablePanel->setCollapsible(true);
+		chartPanel->setCollapsible(true);
 
 		tablePanel->setWidth(450);
 		chartPanel->setWidth(450);
@@ -109,8 +109,8 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		Wt::WAnimation tableAnimation(Wt::WAnimation::SlideInFromTop,Wt::WAnimation::EaseOut, 333);
 		Wt::WAnimation chartAnimation(Wt::WAnimation::SlideInFromTop,Wt::WAnimation::EaseOut, 333);
 
-		//tablePanel->setAnimation(tableAnimation);
-		//chartPanel->setAnimation(chartAnimation);
+		tablePanel->setAnimation(tableAnimation);
+		chartPanel->setAnimation(chartAnimation);
 
 		switch (sdt.type){
 		case 0:
@@ -160,7 +160,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 		tablePanel->setCentralWidget(table);
 		tableContainerTable->elementAt(typeNum/2, typeNum%2)->addWidget(tablePanel);
 
-		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2, NULL);
+		Wt::WStandardItemModel *model = new Wt::WStandardItemModel(sdt.values.size(),2,this);
 		for (unsigned i = 0; i < sdt.values.size(); i++) {
 			model->setData(i,0, boost::any(sdt.timestamps.at(i)));
 			model->setData(i,1, boost::any(sdt.values.at(i)));
@@ -200,7 +200,7 @@ void NodeDetails::responseArrived(boost::system::error_code err, const Wt::Http:
 	tabW->addTab(tableScrollArea, "Tables", Wt::WTabWidget::PreLoading);
 	tabW->addTab(chartScrollArea, "Charts", Wt::WTabWidget::PreLoading);
 	addWidget(tabW);
-	Wt::WApplication::instance()->triggerUpdate();
+	//Wt::WApplication::instance()->triggerUpdate();
 }
 void NodeDetails::showRequestErrorMessage(std::string msg) {
 	addWidget(new Wt::WText(msg.c_str()));
